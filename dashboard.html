@@ -37,8 +37,8 @@
         body.dark-theme {
             --background-body: #111827;
             --background-card: #1f2937;
-            --color-text-main: #f3f4f6;
-            --color-text-secondary: #d1d5db;
+            --color-text-main: #a6a7a7;
+            --color-text-secondary: #6c6d6e;
             --color-accent: #60a5fa;
             --color-primary: #f3f4f6;
             --color-primary-light: #374151;
@@ -164,6 +164,12 @@
         .grid-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--spacing-medium);
+            margin-bottom: var(--spacing-large);
+        }
+                .grid-container1 {
+            display: grid;
+            grid-template-columns: 100%;
             gap: var(--spacing-medium);
             margin-bottom: var(--spacing-large);
         }
@@ -459,14 +465,14 @@
             <section class="card">
                 <h3>Attendance</h3>
                 <p class="attendance">73%</p>
-                <p style="color: var(--color-text-secondary); margin-bottom: 10px;">Semester 05</p>
+                <p style="color: var(--color-text-secondary); margin-bottom: 10px;">Semester 06</p>
                 <div class="subject-list">
-                    <p>Accounts: 78/100</p>
-                    <p>Bus. Study: 78/100</p>
-                    <p>Economics: 75/100</p>
-                    <p>Income Tax: 70/100</p>
-                    <p>French: 65/100</p>
-                    <p>Com. Skill: 72/100</p>
+                    <ul>
+                    <li>Engg. Mathematics-II: 78/100</li>
+                <li>Fundamnetals of Mechanical Engineering: 78/100</li>
+                    <li>Fundamentals of Electronics Engineering: 75/100</li>
+                    <li>Engg. Chemistry: 70/100</li>
+                    <li>Soft Skills: 65/100</li></ul>
                 </div>
             </section>
 
@@ -475,32 +481,33 @@
                 <div class="performance">
                     <div>
                         <span>8.2</span>
-                        <p style="font-size: 0.9em; color: var(--color-text-secondary);">Accounts</p>
+                        <p style="font-size: 0.9em; color: var(--color-text-secondary);">Engg. Mathematics-II</p>
                     </div>
                     <div>
                         <span>8.8</span>
-                        <p style="font-size: 0.9em; color: var(--color-text-secondary);">Bus. Study</p>
+                        <p style="font-size: 0.9em; color: var(--color-text-secondary);">Soft Skills</p>
                     </div>
                     <div>
                         <span>7.5</span>
-                        <p style="font-size: 0.9em; color: var(--color-text-secondary);">Economics</p>
+                        <p style="font-size: 0.9em; color: var(--color-text-secondary);">Engg. Chemistry</p>
                     </div>
+                    
                 </div>
             </section>
 
             <section class="card">
                 <h3>Schedule</h3>
                 <div class="schedule-grid">
-                    <div class="schedule-slot slot-green">Accounts<br>10:00 AM</div>
-                    <div class="schedule-slot slot-orange">Income Tax<br>11:00 AM</div>
-                    <div class="schedule-slot slot-blue">Bus. Study<br>01:00 PM</div>
-                    <div class="schedule-slot slot-purple">French<br>02:00 PM</div>
-                    <div class="schedule-slot slot-red">Economics<br>03:00 PM</div>
+                    <div class="schedule-slot slot-green">Engg. Mathematics-II<br>10:00 AM</div>
+                    <div class="schedule-slot slot-orange">Fundamentals of Electronics Engineering<br>11:00 AM</div>
+                    <div class="schedule-slot slot-blue">Fundamnetals of Mechanical Engineering<br>01:00 PM</div>
+                    <div class="schedule-slot slot-purple">Soft Skills<br>02:00 PM</div>
+                    <div class="schedule-slot slot-red">Engg. Chemistry<br>03:00 PM</div>
                 </div>
             </section>
         </div>
 
-        <div class="grid-container">
+        <div class="grid-container1">
             <section class="card">
                 <div class="assignment-header">
                     <h3>Assignments</h3>
@@ -516,7 +523,7 @@
                         </button>
                     </div>
                 </div>
-                <div class="scrollable-card-content">
+                <div class="card">
                     <table class="assignment-table" id="assignment-table">
                         <thead>
                             <tr>
@@ -528,52 +535,35 @@
                         </thead>
                         <tbody>
                             <tr data-status="pending">
-                                <td>Accounts</td>
+                                <td>Engg. Chemistry</td>
                                 <td>Rajesh Joshi</td>
                                 <td><span class="status pending">Pending</span></td>
-                                <td>31 Jul 2020</td>
+                                <td>12 Sep 2025</td>
                             </tr>
                             <tr data-status="submitted">
-                                <td>Bus. Study</td>
-                                <td>Dave Stanley</td>
+                                <td>Soft Skills</td>
+                                <td>Anas Khan</td>
                                 <td><span class="status submitted">Submitted</span></td>
-                                <td>05 Aug 2020</td>
+                                <td>15 Sep 2025</td>
                             </tr>
                             <tr data-status="pending">
-                                <td>French</td>
-                                <td>Marie Dupuis</td>
+                                <td>Fundamnetals of Mechanical Engineering</td>
+                                <td>Shivam Khanna</td>
                                 <td><span class="status pending">Pending</span></td>
-                                <td>31 Jul 2020</td>
+                                <td>18 Sep 2025</td>
                             </tr>
                             <tr data-status="drafted">
-                                <td>Income Tax</td>
-                                <td>Manish Shukla</td>
+                                <td>Engg. Mathematics-II</td>
+                                <td>Varun Tanwar</td>
                                 <td><span class="status drafted">Drafted</span></td>
-                                <td>31 Jul 2020</td>
+                                <td>21 Sep 2025</td>
                             </tr>
                             <tr data-status="submitted">
-                                <td>Physics</td>
-                                <td>Dr. Smith</td>
+                                <td>Fundamentals of Electronics Engineering</td>
+                                <td>Seraj Ahmad</td>
                                 <td><span class="status submitted">Submitted</span></td>
                                 <td>15 Sep 2020</td>
                             </tr>
-                            <tr data-status="pending">
-                                <td>Chemistry</td>
-                                <td>Ms. Lee</td>
-                                <td><span class="status pending">Pending</span></td>
-                                <td>20 Sep 2020</td>
-                            </tr>
-                            <tr data-status="drafted">
-                                <td>Math</td>
-                                <td>Mr. Jones</td>
-                                <td><span class="status drafted">Drafted</span></td>
-                                <td>25 Sep 2020</td>
-                            </tr>
-                            <tr data-status="submitted">
-                                <td>Biology</td>
-                                <td>Ms. Green</td>
-                                <td><span class="status submitted">Submitted</span></td>
-                                <td>30 Sep 2020</td>
                             </tr>
                         </tbody>
                     </table>
@@ -625,7 +615,7 @@
                     <li class="activity-item">
                         <i class="fas fa-bell icon"></i>
                         <div class="details">
-                            <span>New announcement:</span> Mandatory curfew on 24th July.
+                            <span>New announcement:</span> Mandatory curfew on 24th Sep.
                         </div>
                     </li>
                     <li class="activity-item">
@@ -637,7 +627,7 @@
                     <li class="activity-item">
                         <i class="fas fa-hourglass-half icon"></i>
                         <div class="details">
-                            <span>Deadline approaching:</span> Accounts assignment due 31 Jul.
+                            <span>Deadline approaching:</span> Accounts assignment due 30 Sep.
                         </div>
                     </li>
                 </ul>
