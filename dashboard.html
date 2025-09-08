@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>University Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* CSS Variables */
+        :root {
+            /* Light Theme Colors */
+            --background-body: #f5f8fa;
+            --background-card: #ffffff;
+            --color-text-main: #1f2937;
+            --color-text-secondary: #6b7280;
+            --color-accent: #3b82f6;
+            --color-primary: #0f172a;
+            --color-primary-light: #eef2ff;
+            --color-border: #e5e7eb;
+            --color-shadow: rgba(0, 0, 0, 0.05);
+
+            /* Spacing and Borders */
+            --spacing-small: 10px;
+            --spacing-medium: 15px;
+            --spacing-large: 20px;
+            --border-radius-card: 12px;
+            --border-radius-item: 8px;
+        }
+
+        /* Dark Theme */
+        body.dark-theme {
+            --background-body: #111827;
+            --background-card: #1f2937;
+            --color-text-main: #f3f4f6;
+            --color-text-secondary: #d1d5db;
+            --color-accent: #60a5fa;
+            --color-primary: #f3f4f6;
+            --color-primary-light: #374151;
+            --color-border: #374151;
+            --color-shadow: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Global Styles */
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: var(--background-body);
+            display: flex;
+            color: var(--color-text-main);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        h2,
+        h3,
+        p {
+            margin: 0;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 240px;
+            background: var(--background-card);
+            height: 100vh;
+            border-right: 1px solid var(--color-border);
+            padding: var(--spacing-large) var(--spacing-small);
+            position: fixed;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 2px 0 5px var(--color-shadow);
+        }
+
+        .sidebar-logo {
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: var(--color-accent);
+            margin-bottom: var(--spacing-large);
+        }
+
+        .sidebar-nav {
+            list-style: none;
+            padding: 0;
+            flex-grow: 1;
+        }
+
+        .nav-item {
+            margin: var(--spacing-small) 0;
+            padding: var(--spacing-medium);
+            border-radius: var(--border-radius-item);
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            background: var(--color-primary-light);
+            color: var(--color-accent);
+        }
+
+        .user-info {
+            text-align: center;
+            padding-top: var(--spacing-medium);
+            border-top: 1px solid var(--color-border);
+            color: var(--color-text-secondary);
+        }
+
+        .user-info p {
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        /* Main Content */
+        .main {
+            margin-left: 240px;
+            padding: var(--spacing-large);
+            width: calc(100% - 240px);
+        }
+
+        .main-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-large);
+        }
+
+        .main-header .title {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .theme-toggle {
+            cursor: pointer;
+            font-size: 1.2em;
+            color: var(--color-text-secondary);
+        }
+
+        .alert {
+            background: var(--color-primary-light);
+            padding: var(--spacing-small) var(--spacing-medium);
+            border-radius: var(--border-radius-item);
+            font-size: 0.9em;
+            margin-bottom: var(--spacing-large);
+            color: var(--color-text-main);
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--spacing-medium);
+            margin-bottom: var(--spacing-large);
+        }
+
+        .card {
+            background: var(--background-card);
+            border-radius: var(--border-radius-card);
+            padding: var(--spacing-large);
+            box-shadow: 0 4px 12px var(--color-shadow);
+        }
+
+        .card h3 {
+            font-size: 1.1em;
+            margin-bottom: var(--spacing-medium);
+        }
+
+        .attendance {
+            font-size: 3em;
+            font-weight: bold;
+            color: var(--color-accent);
+        }
+
+        .subject-list p {
+            font-size: 0.9em;
+            margin: 5px 0;
+            color: var(--color-text-secondary);
+        }
+
+        .performance {
+            display: flex;
+            justify-content: space-around;
+            margin-top: var(--spacing-medium);
+        }
+
+        .performance div {
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .performance div span {
+            display: block;
+            font-size: 1.2em;
+            margin-bottom: 5px;
+            color: var(--color-accent);
+        }
+
+        .schedule-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--spacing-small);
+        }
+
+        .schedule-slot {
+            padding: var(--spacing-small);
+            border-radius: var(--border-radius-item);
+            font-size: 0.8em;
+            text-align: center;
+            color: var(--color-text-main);
+        }
+
+        .slot-green {
+            background: #d1fae5;
+        }
+
+        .slot-red {
+            background: #fee2e2;
+        }
+
+        .slot-orange {
+            background: #ffedd5;
+        }
+
+        .slot-purple {
+            background: #ede9fe;
+        }
+
+        .slot-blue {
+            background: #dbeafe;
+        }
+
+        .assignment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-medium);
+        }
+
+        .assignment-header select,
+        .assignment-header button {
+            padding: 5px 10px;
+            border-radius: var(--border-radius-item);
+            border: 1px solid var(--color-border);
+            background: var(--background-body);
+            color: var(--color-text-main);
+            cursor: pointer;
+        }
+
+        .assignment-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: var(--spacing-small);
+        }
+
+        .assignment-table th,
+        .assignment-table td {
+            text-align: left;
+            padding: var(--spacing-medium);
+            border-bottom: 1px solid var(--color-border);
+            font-size: 0.9em;
+        }
+
+        .assignment-table th:last-child,
+        .assignment-table td:last-child {
+            text-align: right;
+        }
+
+        .status {
+            padding: 4px 10px;
+            border-radius: 16px;
+            font-size: 0.7em;
+            color: #fff;
+        }
+
+        .status.pending {
+            background: #fbbf24;
+        }
+
+        .status.submitted {
+            background: #22c55e;
+        }
+
+        .status.drafted {
+            background: #3b82f6;
+        }
+
+        .upload-box {
+            border: 2px dashed var(--color-border);
+            padding: var(--spacing-large);
+            text-align: center;
+            border-radius: var(--border-radius-item);
+            margin-top: var(--spacing-medium);
+            cursor: pointer;
+            color: var(--color-text-secondary);
+            transition: border-color 0.3s;
+        }
+
+        .upload-box:hover {
+            border-color: var(--color-accent);
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: var(--spacing-medium);
+            padding: 10px 20px;
+            border: none;
+            border-radius: var(--border-radius-item);
+            background: var(--color-accent);
+            color: #fff;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background: #2563eb;
+        }
+
+        .activity-list {
+            list-style: none;
+            padding: 0;
+            margin-top: var(--spacing-small);
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: var(--spacing-medium);
+        }
+
+        .activity-item .icon {
+            font-size: 1.2em;
+            color: var(--color-accent);
+        }
+
+        .activity-item .details {
+            font-size: 0.9em;
+        }
+
+        .activity-item .details span {
+            font-weight: bold;
+            display: block;
+        }
+
+        /* Hostel Occupancy */
+        .hostel-stat {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .hostel-stat span:first-child {
+            font-size: 1em;
+            font-weight: bold;
+        }
+
+        .hostel-stat-bar {
+            background: var(--color-primary-light);
+            height: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+            flex-grow: 1;
+            margin: 0 10px;
+        }
+
+        .hostel-stat-bar-fill {
+            height: 100%;
+            background: var(--color-accent);
+        }
+
+        /* Scrollable Content for Cards */
+        .scrollable-card-content {
+            max-height: 250px;
+            /* Adjust as needed */
+            overflow-y: auto;
+            padding-right: 10px;
+            /* To prevent scrollbar from hiding content */
+        }
+    </style>
+</head>
+
+<body>
+
+    <aside class="sidebar">
+        <div class="sidebar-logo">University</div>
+        <nav>
+            <ul class="sidebar-nav">
+                <li class="nav-item active">
+                    <i class="fas fa-th-large"></i> Dashboard
+                </li>
+                <li class="nav-item">
+                    <i class="fas fa-calendar-alt"></i> Calendar
+                </li>
+                <li class="nav-item">
+                    <i class="fas fa-chalkboard-teacher"></i> Teachers
+                </li>
+                <li class="nav-item">
+                    <i class="fas fa-book"></i> Course
+                </li>
+                <li class="nav-item">
+                    <i class="fas fa-chart-line"></i> Attendance
+                </li>
+                <li class="nav-item">
+                    <i class="fas fa-tasks"></i> Assignment
+                </li>
+            </ul>
+        </nav>
+        <div class="user-info">
+            <i class="fas fa-user-circle fa-2x"></i>
+            <p>David Smith</p>
+        </div>
+    </aside>
+
+    <main class="main">
+        <header class="main-header">
+            <div class="title">Dashboard</div>
+            <div class="theme-toggle" id="themeToggle">
+                <i class="fas fa-moon"></i>
+            </div>
+        </header>
+
+        <div class="alert">
+            <i class="fas fa-info-circle"></i>
+            All classes are cancelled for 24th July 2020 due to mandatory curfew. Semester 6 results will be declared on
+            31st July 2020.
+        </div>
+
+        <div class="grid-container">
+            <section class="card">
+                <h3>Attendance</h3>
+                <p class="attendance">73%</p>
+                <p style="color: var(--color-text-secondary); margin-bottom: 10px;">Semester 05</p>
+                <div class="subject-list">
+                    <p>Accounts: 78/100</p>
+                    <p>Bus. Study: 78/100</p>
+                    <p>Economics: 75/100</p>
+                    <p>Income Tax: 70/100</p>
+                    <p>French: 65/100</p>
+                    <p>Com. Skill: 72/100</p>
+                </div>
+            </section>
+
+            <section class="card">
+                <h3>Performance (CGPA)</h3>
+                <div class="performance">
+                    <div>
+                        <span>8.2</span>
+                        <p style="font-size: 0.9em; color: var(--color-text-secondary);">Accounts</p>
+                    </div>
+                    <div>
+                        <span>8.8</span>
+                        <p style="font-size: 0.9em; color: var(--color-text-secondary);">Bus. Study</p>
+                    </div>
+                    <div>
+                        <span>7.5</span>
+                        <p style="font-size: 0.9em; color: var(--color-text-secondary);">Economics</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="card">
+                <h3>Schedule</h3>
+                <div class="schedule-grid">
+                    <div class="schedule-slot slot-green">Accounts<br>10:00 AM</div>
+                    <div class="schedule-slot slot-orange">Income Tax<br>11:00 AM</div>
+                    <div class="schedule-slot slot-blue">Bus. Study<br>01:00 PM</div>
+                    <div class="schedule-slot slot-purple">French<br>02:00 PM</div>
+                    <div class="schedule-slot slot-red">Economics<br>03:00 PM</div>
+                </div>
+            </section>
+        </div>
+
+        <div class="grid-container">
+            <section class="card">
+                <div class="assignment-header">
+                    <h3>Assignments</h3>
+                    <div>
+                        <select id="assignment-filter">
+                            <option value="all">All</option>
+                            <option value="pending">Pending</option>
+                            <option value="submitted">Submitted</option>
+                            <option value="drafted">Drafted</option>
+                        </select>
+                        <button class="btn" style="padding: 5px 10px; background: #22c55e;">
+                            <i class="fas fa-download"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="scrollable-card-content">
+                    <table class="assignment-table" id="assignment-table">
+                        <thead>
+                            <tr>
+                                <th>Subject</th>
+                                <th>Teacher</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-status="pending">
+                                <td>Accounts</td>
+                                <td>Rajesh Joshi</td>
+                                <td><span class="status pending">Pending</span></td>
+                                <td>31 Jul 2020</td>
+                            </tr>
+                            <tr data-status="submitted">
+                                <td>Bus. Study</td>
+                                <td>Dave Stanley</td>
+                                <td><span class="status submitted">Submitted</span></td>
+                                <td>05 Aug 2020</td>
+                            </tr>
+                            <tr data-status="pending">
+                                <td>French</td>
+                                <td>Marie Dupuis</td>
+                                <td><span class="status pending">Pending</span></td>
+                                <td>31 Jul 2020</td>
+                            </tr>
+                            <tr data-status="drafted">
+                                <td>Income Tax</td>
+                                <td>Manish Shukla</td>
+                                <td><span class="status drafted">Drafted</span></td>
+                                <td>31 Jul 2020</td>
+                            </tr>
+                            <tr data-status="submitted">
+                                <td>Physics</td>
+                                <td>Dr. Smith</td>
+                                <td><span class="status submitted">Submitted</span></td>
+                                <td>15 Sep 2020</td>
+                            </tr>
+                            <tr data-status="pending">
+                                <td>Chemistry</td>
+                                <td>Ms. Lee</td>
+                                <td><span class="status pending">Pending</span></td>
+                                <td>20 Sep 2020</td>
+                            </tr>
+                            <tr data-status="drafted">
+                                <td>Math</td>
+                                <td>Mr. Jones</td>
+                                <td><span class="status drafted">Drafted</span></td>
+                                <td>25 Sep 2020</td>
+                            </tr>
+                            <tr data-status="submitted">
+                                <td>Biology</td>
+                                <td>Ms. Green</td>
+                                <td><span class="status submitted">Submitted</span></td>
+                                <td>30 Sep 2020</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section class="card">
+                <h3>Hostel Occupancy</h3>
+                <div style="font-size: 1.5em; font-weight: bold; margin-bottom: 10px;">
+                    182 / 200 <span
+                        style="font-size: 0.7em; font-weight: normal; color: var(--color-text-secondary);">Beds
+                        Occupied</span>
+                </div>
+                <div class="hostel-stat">
+                    <span>Floor 1</span>
+                    <div class="hostel-stat-bar">
+                        <div class="hostel-stat-bar-fill" style="width: 95%;"></div>
+                    </div>
+                    <span>95%</span>
+                </div>
+                <div class="hostel-stat">
+                    <span>Floor 2</span>
+                    <div class="hostel-stat-bar">
+                        <div class="hostel-stat-bar-fill" style="width: 85%;"></div>
+                    </div>
+                    <span>85%</span>
+                </div>
+                <div class="hostel-stat">
+                    <span>Floor 3</span>
+                    <div class="hostel-stat-bar">
+                        <div class="hostel-stat-bar-fill" style="width: 70%;"></div>
+                    </div>
+                    <span>70%</span>
+                </div>
+            </section>
+
+            <section class="card">
+                <h3>Upload Assignment</h3>
+                <div class="upload-box" id="uploadBox">
+                    <i class="fas fa-cloud-upload-alt fa-2x"></i>
+                    <p>Drag & drop or click to upload file (PDF, DOC, DOCX)</p>
+                </div>
+                <button class="btn">Upload & Submit</button>
+            </section>
+
+            <section class="card">
+                <h3>Recent Activity</h3>
+                <ul class="activity-list">
+                    <li class="activity-item">
+                        <i class="fas fa-bell icon"></i>
+                        <div class="details">
+                            <span>New announcement:</span> Mandatory curfew on 24th July.
+                        </div>
+                    </li>
+                    <li class="activity-item">
+                        <i class="fas fa-check-circle icon"></i>
+                        <div class="details">
+                            <span>Assignment submitted:</span> Bus. Study assignment.
+                        </div>
+                    </li>
+                    <li class="activity-item">
+                        <i class="fas fa-hourglass-half icon"></i>
+                        <div class="details">
+                            <span>Deadline approaching:</span> Accounts assignment due 31 Jul.
+                        </div>
+                    </li>
+                </ul>
+            </section>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const uploadBox = document.getElementById('uploadBox');
+            const themeToggle = document.getElementById('themeToggle');
+            const navItems = document.querySelectorAll('.nav-item');
+            const assignmentFilter = document.getElementById('assignment-filter');
+            const assignmentTableBody = document.querySelector('#assignment-table tbody');
+
+            // --- File Upload Logic ---
+            uploadBox.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadBox.style.borderColor = 'var(--color-accent)';
+            });
+            uploadBox.addEventListener('dragleave', () => {
+                uploadBox.style.borderColor = 'var(--color-border)';
+            });
+            uploadBox.addEventListener('drop', (e) => {
+                e.preventDefault();
+                const file = e.dataTransfer.files[0];
+                uploadBox.innerHTML = `<i class="fas fa-file-alt fa-2x"></i><p>File attached: ${file.name}</p>`;
+                uploadBox.style.borderColor = '#22c55e';
+            });
+
+            // --- Theme Toggle Logic ---
+            themeToggle.addEventListener('click', () => {
+                document.body.classList.toggle('dark-theme');
+                const isDark = document.body.classList.contains('dark-theme');
+                themeToggle.innerHTML = isDark
+                    ? '<i class="fas fa-sun"></i>'
+                    : '<i class="fas fa-moon"></i>';
+            });
+
+            // --- Active Nav Item Logic ---
+            navItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    navItems.forEach(i => i.classList.remove('active'));
+                    item.classList.add('active');
+                });
+            });
+
+            // --- Assignment Filter Logic ---
+            assignmentFilter.addEventListener('change', (e) => {
+                const filterValue = e.target.value;
+                const rows = assignmentTableBody.querySelectorAll('tr');
+
+                rows.forEach(row => {
+                    const status = row.getAttribute('data-status');
+                    if (filterValue === 'all' || status === filterValue) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
