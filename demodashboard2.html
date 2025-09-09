@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>University Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @font-face {
+            font-family: "Horizon";
+            src: url("fonts/Horizon.otf") format("opentype");
+        }
+
+        /* CSS Variables */
+        :root {
+            /* Light Theme Colors */
+            --background-body: #f5f8fa;
+            --background-card: #ffffff;
+            --color-text-main: #1f2937;
+            --color-text-secondary: #6b7280;
+            --color-accent: #3b82f6;
+            --color-primary: #0f172a;
+            --color-primary-light: #eef2ff;
+            --color-border: #e5e7eb;
+            --color-shadow: rgba(0, 0, 0, 0.05);
+
+            /* Spacing and Borders */
+            --spacing-small: 10px;
+            --spacing-medium: 15px;
+            --spacing-large: 20px;
+            --border-radius-card: 12px;
+            --border-radius-item: 8px;
+        }
+
+        /* Dark Theme */
+        body.dark-theme {
+            --background-body: #111827;
+            --background-card: #1f2937;
+            --color-text-main: #a6a7a7;
+            --color-text-secondary: #6c6d6e;
+            --color-accent: #60a5fa;
+            --color-primary: #f3f4f6;
+            --color-primary-light: #374151;
+            --color-border: #374151;
+            --color-shadow: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Global Styles */
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: var(--background-body);
+            display: flex;
+            color: var(--color-text-main);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        h2,
+        h3,
+        p {
+            margin: 0;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 240px;
+            background: var(--background-card);
+            height: 100vh;
+            border-right: 1px solid var(--color-border);
+            padding: var(--spacing-large) var(--spacing-small);
+            position: fixed;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 2px 0 5px var(--color-shadow);
+
+        }
+
+        .sidebar-logo {
+            font-family: "Horizon", sans-serif;
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: var(--color-accent);
+            margin-bottom: var(--spacing-large);
+        }
+
+        .sidebar-nav {
+            list-style: none;
+            padding: 0;
+            flex-grow: 1;
+        }
+
+        .nav-item {
+            margin: var(--spacing-small) 0;
+            padding: var(--spacing-medium);
+            border-radius: var(--border-radius-item);
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            background: var(--color-primary-light);
+            color: var(--color-accent);
+        }
+
+        .user-info {
+            text-align: center;
+            padding-top: var(--spacing-medium);
+            border-top: 1px solid var(--color-border);
+            color: var(--color-text-secondary);
+        }
+
+        .user-info p {
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        /* Main Content */
+        .main {
+            margin-left: 260px;
+            padding: var(--spacing-large);
+            width: calc(100% - 240px);
+        }
+
+        .main-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-large);
+        }
+
+        .main-header .title {
+            font-size: 1.5em;
+            font-weight: bold;
+            font-family: "Horizon", sans-serif;
+
+        }
+
+        .theme-toggle {
+            cursor: pointer;
+            font-size: 1.2em;
+            color: var(--color-text-secondary);
+        }
+
+        .alert {
+            background: var(--color-primary-light);
+            padding: var(--spacing-small) var(--spacing-medium);
+            border-radius: var(--border-radius-item);
+            font-size: 0.9em;
+            margin-bottom: var(--spacing-large);
+            color: var(--color-text-main);
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--spacing-medium);
+            margin-bottom: var(--spacing-large);
+        }
+                .grid-container1 {
+            display: grid;
+            grid-template-columns: 100%;
+            gap: var(--spacing-medium);
+            margin-bottom: var(--spacing-large);
+        }
+
+        .card {
+            background: var(--background-card);
+            border-radius: var(--border-radius-card);
+            padding: var(--spacing-large);
+            box-shadow: 0 4px 12px var(--color-shadow);
+        }
+
+        .card h3 {
+            font-size: 1.1em;
+            margin-bottom: var(--spacing-medium);
+        }
+
+        .attendance {
+            font-size: 3em;
+            font-weight: bold;
+            color: var(--color-accent);
+        }
+
+        .subject-list p {
+            font-size: 0.9em;
+            margin: 5px 0;
+            color: var(--color-text-secondary);
+        }
+
+        .performance {
+            display: flex;
+            justify-content: space-around;
+            margin-top: var(--spacing-medium);
+        }
+
+        .performance div {
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .performance div span {
+            display: block;
+            font-size: 1.2em;
+            margin-bottom: 5px;
+            color: var(--color-accent);
+        }
+
+        .schedule-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--spacing-small);
+        }
+
+        .schedule-slot {
+            padding: var(--spacing-small);
+            border-radius: var(--border-radius-item);
+            font-size: 0.8em;
+            text-align: center;
+            color: var(--color-text-main);
+        }
+
+        .slot-green {
+            background: #d1fae5;
+        }
+
+        .slot-red {
+            background: #fee2e2;
+        }
+
+        .slot-orange {
+            background: #ffedd5;
+        }
+
+        .slot-purple {
+            background: #ede9fe;
+        }
+
+        .slot-blue {
+            background: #dbeafe;
+        }
+
+        .assignment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-medium);
+        }
+
+        .assignment-header select,
+        .assignment-header button {
+            padding: 5px 10px;
+            border-radius: var(--border-radius-item);
+            border: 1px solid var(--color-border);
+            background: var(--background-body);
+            color: var(--color-text-main);
+            cursor: pointer;
+        }
+
+        .assignment-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: var(--spacing-small);
+        }
+
+        .assignment-table th,
+        .assignment-table td {
+            text-align: left;
+            padding: var(--spacing-medium);
+            border-bottom: 1px solid var(--color-border);
+            font-size: 0.9em;
+        }
+
+        .assignment-table th:last-child,
+        .assignment-table td:last-child {
+            text-align: right;
+        }
+
+        .status {
+            padding: 4px 10px;
+            border-radius: 16px;
+            font-size: 0.7em;
+            color: #fff;
+        }
+
+        .status.pending {
+            background: #fbbf24;
+        }
+
+        .status.submitted {
+            background: #22c55e;
+        }
+
+        .status.drafted {
+            background: #3b82f6;
+        }
+
+        .upload-box {
+            border: 2px dashed var(--color-border);
+            padding: var(--spacing-large);
+            text-align: center;
+            border-radius: var(--border-radius-item);
+            margin-top: var(--spacing-medium);
+            cursor: pointer;
+            color: var(--color-text-secondary);
+            transition: border-color 0.3s;
+        }
+
+        .upload-box:hover {
+            border-color: var(--color-accent);
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: var(--spacing-medium);
+            padding: 10px 20px;
+            border: none;
+            border-radius: var(--border-radius-item);
+            background: var(--color-accent);
+            color: #fff;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background: #2563eb;
+        }
+
+        .activity-list {
+            list-style: none;
+            padding: 0;
+            margin-top: var(--spacing-small);
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: var(--spacing-medium);
+        }
+
+        .activity-item .icon {
+            font-size: 1.2em;
+            color: var(--color-accent);
+        }
+
+        .activity-item .details {
+            font-size: 0.9em;
+        }
+
+        .activity-item .details span {
+            font-weight: bold;
+            display: block;
+        }
+
+        /* Hostel Occupancy */
+        .hostel-stat {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .hostel-stat span:first-child {
+            font-size: 1em;
+            font-weight: bold;
+        }
+
+        .hostel-stat-bar {
+            background: var(--color-primary-light);
+            height: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+            flex-grow: 1;
+            margin: 0 10px;
+        }
+
+        .hostel-stat-bar-fill {
+            height: 100%;
+            background: var(--color-accent);
+        }
+
+        /* Scrollable Content for Cards */
+        .scrollable-card-content {
+            max-height: 250px;
+            /* Adjust as needed */
+            overflow-y: auto;
+            padding-right: 10px;
+            /* To prevent scrollbar from hiding content */
+        }
+
+        .logo {
+            height: 30px;
+        }
+
+        .navtext {
+            font-weight: bold;
+            font-size: 15px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+
+    <aside class="sidebar">
+        <div class="sidebar-logo"><img src="./Logo.png" class="logo">
+            <p class="navtext">College Logo
+            <p>
+        </div>
+        <nav>
+            <ul class="sidebar-nav">
+                <li class="nav-item active">
+                    <i class="fas fa-th-large"></i> Dashboard
+                </li>
+                <li class="nav-item">
+                    <i class="fas fa-calendar-alt"></i> Calendar
+                </li>
+                <li class="nav-item">
+                    <i class="fas fa-chalkboard-teacher"></i> Teachers
+                </li>
+                <li class="nav-item">
+                    <i class="fas fa-book"></i> Course
+                </li>
+                <li class="nav-item">
+                    <i class="fas fa-chart-line"></i> Attendance
+                </li>
+                <li class="nav-item">
+                    <i class="fas fa-tasks"></i> Assignment
+                </li>
+            </ul>
+        </nav>
+        <div class="user-info">
+            <i class="fas fa-user-circle fa-2x"></i>
+            <p>Vedant Bansal</p>
+        </div>
+    </aside>
+
+    <main class="main">
+        <header class="main-header">
+            <div class="title">Dashboard</div>
+            <div class="theme-toggle" id="themeToggle">
+                <i class="fas fa-moon"></i>
+            </div>
+        </header>
+
+        <div class="alert">
+            <i class="fas fa-info-circle"></i>
+            All classes are cancelled for 24th September 2025 due to mandatory curfew. Semester 6 results will be declared on
+            30st September 2025.
+        </div>
+
+        <div class="grid-container">
+            <section class="card">
+                <h3>Attendance</h3>
+                <p class="attendance">69%</p>
+                <p style="color: var(--color-text-secondary); margin-bottom: 10px;">Semester 06</p>
+                <div class="subject-list">
+                    <ul>
+                    <li>Engg. Mathematics-II: 69/100</li>
+                <li>Fundamnetals of Mechanical Engineering: 63/100</li>
+                    <li>Fundamentals of Electronics Engineering: 95/100</li>
+                    <li>Engg. Chemistry: 53/100</li>
+                    <li>Soft Skills: 61/100</li></ul>
+                </div>
+            </section>
+
+            <section class="card">
+                <h3>Performance (CGPA)</h3>
+                <div class="performance">
+                    <div>
+                        <span>7.6</span>
+                        <p style="font-size: 0.9em; color: var(--color-text-secondary);">Engg. Mathematics-II</p>
+                    </div>
+                    <div>
+                        <span>7.4</span>
+                        <p style="font-size: 0.9em; color: var(--color-text-secondary);">Soft Skills</p>
+                    </div>
+                    <div>
+                        <span>6.8</span>
+                        <p style="font-size: 0.9em; color: var(--color-text-secondary);">Engg. Chemistry</p>
+                    </div>
+                    
+                </div>
+            </section>
+
+            <section class="card">
+                <h3>Schedule</h3>
+                <div class="schedule-grid">
+                    <div class="schedule-slot slot-green">Engg. Mathematics-II<br>10:00 AM</div>
+                    <div class="schedule-slot slot-orange">Fundamentals of Electronics Engineering<br>11:00 AM</div>
+                    <div class="schedule-slot slot-blue">Fundamnetals of Mechanical Engineering<br>01:00 PM</div>
+                    <div class="schedule-slot slot-purple">Soft Skills<br>02:00 PM</div>
+                    <div class="schedule-slot slot-red">Engg. Chemistry<br>03:00 PM</div>
+                </div>
+            </section>
+        </div>
+
+        <div class="grid-container1">
+            <section class="card">
+                <div class="assignment-header">
+                    <h3>Assignments</h3>
+                    <div>
+                        <select id="assignment-filter">
+                            <option value="all">All</option>
+                            <option value="pending">Pending</option>
+                            <option value="submitted">Submitted</option>
+                            <option value="drafted">Drafted</option>
+                        </select>
+                        <button class="btn" style="padding: 5px 10px; background: #22c55e;">
+                            <i class="fas fa-download"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="card">
+                    <table class="assignment-table" id="assignment-table">
+                        <thead>
+                            <tr>
+                                <th>Subject</th>
+                                <th>Teacher</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-status="pending">
+                                <td>Engg. Chemistry</td>
+                                <td>Rajesh Joshi</td>
+                                <td><span class="status pending">Pending</span></td>
+                                <td>12 Sep 2025</td>
+                            </tr>
+                            <tr data-status="submitted">
+                                <td>Soft Skills</td>
+                                <td>Anas Khan</td>
+                                <td><span class="status submitted">Submitted</span></td>
+                                <td>15 Sep 2025</td>
+                            </tr>
+                            <tr data-status="pending">
+                                <td>Fundamnetals of Mechanical Engineering</td>
+                                <td>Shivam Khanna</td>
+                                <td><span class="status pending">Pending</span></td>
+                                <td>18 Sep 2025</td>
+                            </tr>
+                            <tr data-status="drafted">
+                                <td>Engg. Mathematics-II</td>
+                                <td>Varun Tanwar</td>
+                                <td><span class="status drafted">Drafted</span></td>
+                                <td>21 Sep 2025</td>
+                            </tr>
+                            <tr data-status="submitted">
+                                <td>Fundamentals of Electronics Engineering</td>
+                                <td>Seraj Ahmad</td>
+                                <td><span class="status submitted">Submitted</span></td>
+                                <td>15 Sep 2025</td>
+                            </tr>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section class="card">
+                <h3>Hostel Occupancy</h3>
+                <div style="font-size: 1.5em; font-weight: bold; margin-bottom: 10px;">
+                    182 / 200 <span
+                        style="font-size: 0.7em; font-weight: normal; color: var(--color-text-secondary);">Beds
+                        Occupied</span>
+                </div>
+                <div class="hostel-stat">
+                    <span>Floor 1</span>
+                    <div class="hostel-stat-bar">
+                        <div class="hostel-stat-bar-fill" style="width: 95%;"></div>
+                    </div>
+                    <span>95%</span>
+                </div>
+                <div class="hostel-stat">
+                    <span>Floor 2</span>
+                    <div class="hostel-stat-bar">
+                        <div class="hostel-stat-bar-fill" style="width: 85%;"></div>
+                    </div>
+                    <span>85%</span>
+                </div>
+                <div class="hostel-stat">
+                    <span>Floor 3</span>
+                    <div class="hostel-stat-bar">
+                        <div class="hostel-stat-bar-fill" style="width: 70%;"></div>
+                    </div>
+                    <span>70%</span>
+                </div>
+            </section>
+
+            <section class="card">
+                <h3>Upload Assignment</h3>
+                <div class="upload-box" id="uploadBox">
+                    <i class="fas fa-cloud-upload-alt fa-2x"></i>
+                    <p>Drag & drop or click to upload file (PDF, DOC, DOCX)</p>
+                </div>
+                <button class="btn">Upload & Submit</button>
+            </section>
+
+            <section class="card">
+                <h3>Recent Activity</h3>
+                <ul class="activity-list">
+                    <li class="activity-item">
+                        <i class="fas fa-bell icon"></i>
+                        <div class="details">
+                            <span>New announcement:</span> Mandatory curfew on 24th Sep.
+                        </div>
+                    </li>
+                    <li class="activity-item">
+                        <i class="fas fa-check-circle icon"></i>
+                        <div class="details">
+                            <span>Assignment submitted:</span> Bus. Study assignment.
+                        </div>
+                    </li>
+                    <li class="activity-item">
+                        <i class="fas fa-hourglass-half icon"></i>
+                        <div class="details">
+                            <span>Deadline approaching:</span> Accounts assignment due 30 Sep.
+                        </div>
+                    </li>
+                </ul>
+            </section>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const uploadBox = document.getElementById('uploadBox');
+            const themeToggle = document.getElementById('themeToggle');
+            const navItems = document.querySelectorAll('.nav-item');
+            const assignmentFilter = document.getElementById('assignment-filter');
+            const assignmentTableBody = document.querySelector('#assignment-table tbody');
+
+            // --- File Upload Logic ---
+            uploadBox.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadBox.style.borderColor = 'var(--color-accent)';
+            });
+            uploadBox.addEventListener('dragleave', () => {
+                uploadBox.style.borderColor = 'var(--color-border)';
+            });
+            uploadBox.addEventListener('drop', (e) => {
+                e.preventDefault();
+                const file = e.dataTransfer.files[0];
+                uploadBox.innerHTML = `<i class="fas fa-file-alt fa-2x"></i><p>File attached: ${file.name}</p>`;
+                uploadBox.style.borderColor = '#22c55e';
+            });
+
+            // --- Theme Toggle Logic ---
+            themeToggle.addEventListener('click', () => {
+                document.body.classList.toggle('dark-theme');
+                const isDark = document.body.classList.contains('dark-theme');
+                themeToggle.innerHTML = isDark
+                    ? '<i class="fas fa-sun"></i>'
+                    : '<i class="fas fa-moon"></i>';
+            });
+
+            // --- Active Nav Item Logic ---
+            navItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    navItems.forEach(i => i.classList.remove('active'));
+                    item.classList.add('active');
+                });
+            });
+
+            // --- Assignment Filter Logic ---
+            assignmentFilter.addEventListener('change', (e) => {
+                const filterValue = e.target.value;
+                const rows = assignmentTableBody.querySelectorAll('tr');
+
+                rows.forEach(row => {
+                    const status = row.getAttribute('data-status');
+                    if (filterValue === 'all' || status === filterValue) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
